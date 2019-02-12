@@ -1,0 +1,6 @@
+public
+src/libs
+vue.config.js
+node_modules
+dist
+.babelrc
