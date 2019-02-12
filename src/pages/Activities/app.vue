@@ -10,7 +10,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '~@/assets/less/base.less';
+
 div {
   background-color: #000;
 }

@@ -3,6 +3,8 @@ const path = require('path')
 const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const PAGES = getEntrys()
 const htmlConfigPlugins = []
@@ -59,7 +61,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      '@': 'src'
+      '@': resolve('src')
     }
   },
   module: {
@@ -89,14 +91,19 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ['style-loader', 'css-loader', 'less-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ],
         include: [resolve('src')]
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-        include: [resolve('src')]
-      },
+      // {
+      //   test: /\.css$/,
+      //   use: ['vue-style-loader', 'css-loader', 'postcss-loader'],
+      //   include: [resolve('src')]
+      // },
       {
         test: /\.svg$/,
         loader: 'svg-sprite-loader',
@@ -137,7 +144,7 @@ module.exports = {
     splitChunks: {
       // include all types of chunks
       // option ['initial','async','all'] and fn
-      chunks: 'async',
+      chunks: 'all',
       // It is recommended to set splitChunks.name to false for production builds so that it doesn't change names unnecessarily.
       name: true,
       cacheGroups: {
@@ -145,14 +152,13 @@ module.exports = {
           name: 'chunk-vendors',
           priority: -10,
           test: /[\\/]node_modules[\\/]/,
-          // chunks: 'initial',
+          chunks: 'initial', // 只打包初始时依赖的第三方
           minChunks: 2
         },
         common: {
           name: 'chunk-common',
           priority: -20,
           minChunks: 1,
-          // chunks: 'initial',
           reuseExistingChunk: true
         }
       }
@@ -170,10 +176,15 @@ module.exports = {
         sourceMap: true,
         cache: true,
         parallel: true
-      })
+      }),
+      new OptimizeCSSAssetsPlugin()
     ]
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:8].css',
+      chunkFilename: 'css/[name].[contenthash:8].css'
+    }),
     ...htmlConfigPlugins,
     new VueLoaderPlugin()
   ]
