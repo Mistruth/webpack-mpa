@@ -3,6 +3,7 @@ const merge = require('webpack-merge')
 const { VueLoaderPlugin } = require('vue-loader')
 const utils = require('./utils.js')
 const webpack = require('webpack')
+const entrys = utils.entrys
 const htmlConfigPlugins = utils.HtmlPluginsArray
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const path = require('path')
@@ -11,10 +12,11 @@ const webpackConfig = merge(baseWebpackConfig, {
   context: path.resolve(__dirname, '../'),
   mode: 'development',
   devtool: 'source-map',
+  entry: entrys,
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].js',
-    publicPath: '/'
+    chunkFilename: '[chunkhash].js'
   },
   devServer: {
     contentBase: path.join(__dirname, '../dist'),
@@ -27,7 +29,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     compress: true,
     // 出现错误会出现遮罩
     overlay: true,
-    publicPath: '/',
+    // publicPath: '/',
     proxy: {
 
     },

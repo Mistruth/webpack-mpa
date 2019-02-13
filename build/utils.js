@@ -33,6 +33,7 @@ const HtmlPluginsArray = (() => {
       template: pages[chunk].template,
       inject: pages[chunk].inject,
       hash: true,
+      path: path.join(__dirname, '../', 'dist'),
       chunks: pages[chunk].chunks,
       templateParameters: {
         BASE_URL: '',

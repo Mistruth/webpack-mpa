@@ -1,12 +1,14 @@
 <template>
   <div>
-    act
+    act1
   </div>
 </template>
 
 <script>
 export default {
-
+  created() {
+    console.log(2)
+  }
 }
 </script>
 
@@ -14,6 +16,6 @@ export default {
 @import '~@/assets/less/base.less';
 
 div {
-  background-color: #000;
+  background-color: skyblue;
 }
 </style>
