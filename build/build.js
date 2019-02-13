@@ -1,12 +1,14 @@
 const webpack = require('webpack')
 const rm = require('rimraf')
 const path = require('path')
-const webpackConfig = require('./webpack.conf.js')
+const webpackConfig = require('./webpack.prod.conf.js')
 const ora = require('ora')
 const chalk = require('chalk')
 const spinner = ora('building...')
+
 spinner.start()
-rm(path.join('../dist'), error => {
+
+rm(path.join(__dirname, '../', './dist'), error => {
   if (error) throw error
 
   webpack(webpackConfig, (err, stats) => {
