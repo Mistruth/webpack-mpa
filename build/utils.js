@@ -3,26 +3,36 @@ const path = require('path')
 const isProduction = process.env.NODE_ENV === 'production'
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const entrys = {}
+const buildParamsArray = require('../argv.js')
+const allFilePathArray = glob.sync('./src/pages/**/*.js')
+const chunkArray = allFilePathArray.map(path => ({ chunkName: path.split('./src/pages/')[1].split('/app.js')[0], path }))
+
+const getChunkHanldeArray = (buildArray = [], chunks) => {
+  if (buildArray.length === 0) {
+    return chunks
+  } else {
+    return chunks.filter(item => buildArray.includes(item.chunkName))
+  }
+}
 
 const resolve = (dir) => {
   return path.join(__dirname, '..', dir)
 }
 
-const getEntrys = () => {
+const getEntrys = (chunks) => {
   const pages = {}
-  glob.sync('./src/pages/**/*.js').forEach(filePath => {
-    const chunk = filePath.split('./src/pages/')[1].split('/app.js')[0]
-    pages[chunk] = {
-      entry: filePath,
-      template: resolve(`src/pages/${chunk}/index.html`),
+  chunks.forEach(chunk => {
+    pages[chunk.chunkName] = {
+      entry: chunk.path,
+      template: resolve(`src/pages/${chunk.chunkName}/index.html`),
       inject: true,
-      chunks: ['chunk-vendors', 'chunk-common', 'runtime', chunk]
+      chunks: ['chunk-vendors', 'chunk-common', 'runtime', chunk.chunkName]
     }
   })
   return pages
 }
 
-const pages = getEntrys()
+const pages = getEntrys(getChunkHanldeArray(buildParamsArray, chunkArray))
 
 const HtmlPluginsArray = (() => {
   const htmlConfigPlugins = []

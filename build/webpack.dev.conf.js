@@ -19,7 +19,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: '[chunkhash].js'
   },
   devServer: {
-    contentBase: path.join(__dirname, '../dist'),
+    contentBase: path.resolve(__dirname, '../dist'),
     clientLogLevel: 'warning',
     // historyApiFallback: true,
     hot: true,
