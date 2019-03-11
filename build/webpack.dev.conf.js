@@ -35,7 +35,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     },
     quiet: true,
     watchOptions: {
-      poll: false
+      poll: false // 轮询
     }
   },
   plugins: [
