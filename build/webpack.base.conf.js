@@ -41,10 +41,10 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader?cacheDirectory',
         exclude: /node_modules/,
-        include: [resolve('src'), resolve('public')],
-        options: {
-          presets: ['env']
-        }
+        include: [resolve('src'), resolve('public')]
+        // options: {
+        //   presets: ['env']
+        // }
       },
       {
         test: /\.less$/,
